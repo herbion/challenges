@@ -1,16 +1,14 @@
 package com.goevro.challenge.busroute.model;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Route {
   private Integer id;
-  private Map<Station, Integer> stationOrder;
+  private Collection<Station> stations;
 
-  private Route(Integer id, Map<Station, Integer> stationOrder) {
+  private Route(Integer id, Collection<Station> stations) {
     this.id = id;
-    this.stationOrder = stationOrder;
+    this.stations = stations;
   }
 
   public Integer getId() {
@@ -22,17 +20,7 @@ public class Route {
   }
 
   public Collection<Station> getStations() {
-    return stationOrder.keySet();
-  }
-
-  /**
-   * Returns station position on current route
-   *
-   * @param station specific station
-   * @return index of station
-   */
-  public Integer indexOf(Station station) {
-    return stationOrder.get(station);
+    return stations;
   }
 
   /**
@@ -42,12 +30,12 @@ public class Route {
    * @return is station present on route
    */
   public boolean contains(Station station) {
-    return stationOrder.containsKey(station);
+    return stations.contains(station);
   }
 
   public static final class RouteBuilder {
     private Integer id;
-    private Map<Station, Integer> stationOrder = new LinkedHashMap<>();
+    private Set<Station> stations = new LinkedHashSet<>();
 
     private RouteBuilder() {
     }
@@ -62,12 +50,12 @@ public class Route {
     }
 
     public RouteBuilder withStation(Integer stationId) {
-      stationOrder.put(Station.from(stationId), stationOrder.size());
+      stations.add(Station.from(stationId));
       return this;
     }
 
     public Route build() {
-      return new Route(id, stationOrder);
+      return new Route(id, stations);
     }
   }
 }

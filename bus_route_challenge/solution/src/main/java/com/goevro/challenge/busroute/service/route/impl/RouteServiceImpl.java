@@ -9,24 +9,24 @@ import org.springframework.stereotype.Service;
 
 @Primary
 @Service
-public class OrderedRouteService implements RouteService {
+public class RouteServiceImpl implements RouteService {
 
   private RouteStorage routeRepository;
 
-  public OrderedRouteService(RouteStorage routeRepository) {
+  public RouteServiceImpl(RouteStorage routeRepository) {
     this.routeRepository = routeRepository;
   }
 
   /**
    * Check if direct connection exists from station source to station destination,
-   * order of stations inside route does matter. For example:
+   * order of stations inside route does NOT matter. For example:
    * Given route: [1,2,3,4]
    * - 1 -> 3 = true (has direct connection)
-   * - 3 -> 1 = false (no direct connection)
+   * - 3 -> 1 = true (has direct connection)
    * - 1 -> 1 = true
    *
    * @param fromNode department station
-   * @param toNode arrival station
+   * @param toNode   arrival station
    * @return are stations connected directly
    */
   @Override
@@ -34,10 +34,7 @@ public class OrderedRouteService implements RouteService {
     Preconditions.checkNotNull(fromNode, "Missing source information");
     Preconditions.checkNotNull(toNode, "Missing destination information");
 
-    return routeRepository
-            .findAll()
-            .filter(route -> route.contains(fromNode) && route.contains(toNode))
-            .anyMatch(route -> route.indexOf(fromNode) <= route.indexOf(toNode));
+    return routeRepository.findAll().anyMatch(route -> route.contains(fromNode) && route.contains(toNode));
   }
 
 }

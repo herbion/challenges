@@ -13,15 +13,14 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class OrderedRouteServiceTest {
-
-  private OrderedRouteService positionBasedRouteService;
+public class RouteServiceImplTest {
+  private RouteServiceImpl routeService;
   private RouteStorage fakeStorage;
 
   @Before
   public void setup() {
     fakeStorage = mock(RouteStorage.class);
-    positionBasedRouteService = new OrderedRouteService(fakeStorage);
+    routeService = new RouteServiceImpl(fakeStorage);
   }
 
   @Test
@@ -34,7 +33,7 @@ public class OrderedRouteServiceTest {
 
     assertTrue("nodes on same routes should have direct connection", isConnected(3, 6));
     assertFalse("nodes between routes doesn't have direct connection", isConnected(2, 6));
-    assertFalse("nodes on same route should have ordered connection", isConnected(6, 3));
+    assertTrue("nodes on same route should have connection in both ways", isConnected(6, 3));
     assertTrue("node should have reflexive connection", isConnected(3, 3));
 
     assertFalse("missing nodes should not have connection", isConnected(999, 6));
@@ -43,6 +42,6 @@ public class OrderedRouteServiceTest {
   }
 
   private boolean isConnected(int from, int to) {
-    return positionBasedRouteService.isDirectlyConnected(Station.from(from), Station.from(to));
+    return routeService.isDirectlyConnected(Station.from(from), Station.from(to));
   }
 }
