@@ -1,11 +1,15 @@
 package com.goevro.challenge.busroute.service.route.impl;
 
+import com.goevro.challenge.busroute.model.Route;
 import com.goevro.challenge.busroute.model.Station;
 import com.goevro.challenge.busroute.service.route.RouteService;
 import com.goevro.challenge.busroute.storage.RouteStorage;
 import com.google.common.base.Preconditions;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Primary
 @Service
@@ -34,7 +38,14 @@ public class RouteServiceImpl implements RouteService {
     Preconditions.checkNotNull(fromNode, "Missing source information");
     Preconditions.checkNotNull(toNode, "Missing destination information");
 
-    return routeRepository.findAll().anyMatch(route -> route.contains(fromNode) && route.contains(toNode));
+    Collection<Route> fromRoutes = routeRepository.findAvailableRoutes(fromNode);
+    Collection<Route> toRoutes = routeRepository.findAvailableRoutes(toNode);
+
+    return hasCommonRoutes(fromRoutes, toRoutes);
+  }
+
+  private boolean hasCommonRoutes(Collection<Route> fromRoutes, Collection<Route> toRoutes) {
+    return !Collections.disjoint(fromRoutes, toRoutes);
   }
 
 }

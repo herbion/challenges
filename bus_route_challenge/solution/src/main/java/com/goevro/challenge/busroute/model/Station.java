@@ -1,5 +1,7 @@
 package com.goevro.challenge.busroute.model;
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 
 public class Station {
@@ -33,8 +35,13 @@ public class Station {
 
   @Override
   public int hashCode() {
-
     return Objects.hash(id);
   }
 
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+                      .add("id", id)
+                      .toString();
+  }
 }

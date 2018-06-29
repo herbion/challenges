@@ -1,6 +1,11 @@
 package com.goevro.challenge.busroute.model;
 
-import java.util.*;
+import com.google.common.base.MoreObjects;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class Route {
   private Integer id;
@@ -31,6 +36,31 @@ public class Route {
    */
   public boolean contains(Station station) {
     return stations.contains(station);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    Route route = (Route) o;
+    return Objects.equals(id, route.id) &&
+            Objects.equals(stations, route.stations);
+  }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(id, stations);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+                      .add("id", id)
+                      .add("stations", stations)
+                      .toString();
   }
 
   public static final class RouteBuilder {
