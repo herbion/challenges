@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -21,7 +22,7 @@ public class SimpleRouteStorage implements RouteStorage, RefreshableStorage {
   private static final Logger logger = LoggerFactory.getLogger(SimpleRouteStorage.class);
   private final FileResourceRouteParser fileResourceRouteParser;
 
-  private Collection<Route> routes;
+  private Collection<Route> routes = Collections.emptyList();
 
   public SimpleRouteStorage(FileResourceRouteParser fileResourceRouteParser) {
     this.fileResourceRouteParser = fileResourceRouteParser;
